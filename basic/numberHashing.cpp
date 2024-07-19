@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
+#include <climits>
 using namespace std;
-
-void solve(){
-
-}
 
 int main () {
   int n;
@@ -14,12 +11,19 @@ int main () {
     cin >> arr[i];
   }
 
+  //pre-computing
+  map<int, int> mp;
+  for(int i=0; i<n;i++){
+      mp[arr[i]]++;
+  }
 
   int test;
+  cin >> test;
   while(test--){
     int number;
     cin >> number;
-    // solve();
+    //fetching
+    cout << mp[number] << endl;
   }
 
 
