@@ -16,10 +16,23 @@ vector<int> twoSum(vector<int> &nums, int target) {
   
   return {};
 }
+vector<int> twoSumOptimal(vector<int> &nums, int target) {
+  unordered_map<int,int> mp = {};
+  int n = nums.size();
+  int left = 0, right = n-1;
+
+  while(left < right){
+    if(nums[left] + nums[right]){
+      return {left, right};
+    }
+  }
+  
+  return {};
+}
 int main(int argc, char *argv[]) {
   vector<int>nums = {2,7,11,15};
   int target = 9;
-  for (auto it: twoSum(nums,target)){
+  for (auto it: twoSumOptimal(nums,target)){
     cout << it << endl;
   }
   return 0;
