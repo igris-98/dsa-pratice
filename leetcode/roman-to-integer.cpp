@@ -13,42 +13,14 @@ int romanToInt(string str) {
   roman_mapping['M'] = 1000;
 
   int sum = 0;
+  int size = str.length();
 
-  for(int i = str.size(); i >= 0 ; i--){
-    if (i != 0) {
-      if(str[i] == 'V' && str[i-1] == 'I'){
-        sum += 4;
-        i--;
-        continue;
-      }
-      if(str[i] == 'X' && str[i-1] == 'I'){
-        sum += 9;
-        i--;
-        continue;
-      }
-      if(str[i] == 'L' && str[i-1] == 'X'){
-        sum += 40;
-        i--;
-        continue;
-      }
-      if(str[i] == 'C' && str[i-1] == 'X'){
-        sum += 90;
-        i--;
-        continue;
-      }
-      if(str[i] == 'D' && str[i-1] == 'C'){
-        sum += 400;
-        i--;
-        continue;
-      }
-      if(str[i] == 'M' && str[i-1] == 'C'){
-        sum += 900;
-        i--;
-        continue;
-      }
-    
+  for (int i = 0; i < size;i++) {
+    if(roman_mapping[str[i]] < roman_mapping[str[i+1]]){
+      sum -= roman_mapping[str[i]];
+    } else {
+      sum += roman_mapping[str[i]];
     }
-    sum += roman_mapping[str[i]];
   }
   return sum; 
 }
