@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <vector>
 
 using namespace std;
 
@@ -21,11 +20,9 @@ public:
 
 class Linkedlist {
 public:
-  Node* head;
+  Node *head;
 
-  Linkedlist(){
-    this->head = NULL;
-  }
+  Linkedlist() { this->head = NULL; }
 
   void convertArr2LL(vector<int> &arr);
   int length();
@@ -36,11 +33,16 @@ public:
   void removeTail();
   void removeAtIndex(int index);
   void removeElement(int value);
+  void insertHead(int value);
+  void insertTail(int value);
+  void insertAtIndex(int index, int value);
+  void reverseLL();
+  void reverseLLRecursively();
 };
 
-//O(1)
-bool Linkedlist::isEmpty(){
-  if(this->head == nullptr){
+// O(1)
+bool Linkedlist::isEmpty() {
+  if (this->head == nullptr) {
     return true;
   }
   return false;
@@ -84,7 +86,7 @@ int Linkedlist::display() {
 bool Linkedlist::search(int data) {
   Node *mover = this->head;
   while (mover != nullptr) {
-    if(mover -> data == data){
+    if (mover->data == data) {
       return true;
     }
     mover = mover->next;
@@ -93,22 +95,23 @@ bool Linkedlist::search(int data) {
 }
 
 // O(1)
-void Linkedlist::removeHead(){
-  if(this->isEmpty()){
+void Linkedlist::removeHead() {
+  if (this->isEmpty()) {
     cout << "List is Empty";
   } else {
-    Node* temp = this->head; this->head = this->head->next;
+    Node *temp = this->head;
+    this->head = this->head->next;
     delete temp;
   }
 }
 
 // O(n) without Tail Pointer
-void Linkedlist::removeTail(){
-  if(this->isEmpty()){
+void Linkedlist::removeTail() {
+  if (this->isEmpty()) {
     cout << "List is Empty";
   } else {
-    Node* temp = this->head;
-    while(temp->next->next != nullptr){
+    Node *temp = this->head;
+    while (temp->next->next != nullptr) {
       temp = temp->next;
     }
     free(temp->next);
@@ -117,21 +120,21 @@ void Linkedlist::removeTail(){
 }
 
 // O(n)
-void Linkedlist::removeAtIndex(int index){
-  if(this->isEmpty()){
+void Linkedlist::removeAtIndex(int index) {
+  if (this->isEmpty()) {
     cout << "List is Empty";
   } else {
-    Node* curr = this->head;
-    Node* prev = NULL;
+    Node *curr = this->head;
+    Node *prev = NULL;
     int counter = 0;
 
-    if(index == 1){
+    if (index == 1) {
       this->removeHead();
     }
 
-    while(curr != nullptr){
+    while (curr != nullptr) {
       counter++;
-      if(counter == index){
+      if (counter == index) {
         prev->next = prev->next->next;
         free(curr);
         break;
@@ -143,19 +146,19 @@ void Linkedlist::removeAtIndex(int index){
 }
 
 // O(n)
-void Linkedlist::removeElement(int value){
-  if(this->isEmpty()){
+void Linkedlist::removeElement(int value) {
+  if (this->isEmpty()) {
     cout << "List is Empty";
   } else {
-    Node* curr = this->head;
-    Node* prev = NULL;
+    Node *curr = this->head;
+    Node *prev = NULL;
 
-    if(curr->data == value){
+    if (curr->data == value) {
       this->removeHead();
     }
 
-    while(curr != nullptr){
-      if(curr->data == value){
+    while (curr != nullptr) {
+      if (curr->data == value) {
         prev->next = prev->next->next;
         free(curr);
         break;
@@ -164,6 +167,65 @@ void Linkedlist::removeElement(int value){
       curr = curr->next;
     }
   }
+}
+
+// O(n)
+void Linkedlist::insertHead(int value) {
+  Node* newNode = new Node(value);
+  if (this->head != NULL) {
+    newNode->next = this->head;
+  }
+  this->head = newNode;
+}
+
+// O(n)
+void Linkedlist::insertTail(int value) {
+  Node* newNode = new Node(value);
+  Node* mover = this->head;
+  while(mover->next != NULL){
+    mover = mover->next;
+  }
+  mover->next = newNode;
+}
+
+
+// O(n)
+// Edge case : empty, index = 1 and index >= 2;
+void Linkedlist::insertAtIndex(int index, int value){
+  if(this->isEmpty() || index == 1){
+    insertHead(value);
+  } else {
+    int count = 0;
+    Node* mover = this->head;
+    while(mover != NULL){
+      count++;
+      if(count == index - 1){
+        Node* newNode = new Node(value);
+        newNode->next = mover->next;
+        mover->next = newNode;
+      }
+      mover = mover->next;
+    }
+  }
+}
+
+/*
+One more solution to reverse linked list using stack (brute force)
+  1. create a stack 
+  2. Travesal through the linkedlist and push to the stack
+  3. Travesal through linkedlist again change the data to stack.pop();
+  T(n) = O(2n) S(n)=O(n)
+*/
+// O(n)
+void Linkedlist::reverseLL() {
+  Node* curr = this->head; Node* prev = nullptr; Node* next = nullptr;
+  while(curr != nullptr){
+    next = curr -> next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+  }
+  this->head = prev;
 }
 
 int main(int argc, char *argv[]) {
@@ -173,21 +235,44 @@ int main(int argc, char *argv[]) {
   ll.convertArr2LL(arr);
   ll.display();
   cout << endl;
-  cout << "----------"<< endl;
+  cout << "----------" << endl;
+
   /* ll.removeHead();
   ll.removeHead();
   ll.display();
   cout << endl;
   cout << "----------"<< endl; */
+
   /* ll.removeTail();
   ll.display();
   cout << endl;
   cout << "----------"<< endl; */
-  // ll.removeAtIndex(7);
-  ll.removeElement(4);
+
+  /* ll.reverseLL();
+  ll.display();
+  cout << endl;
+  cout << "----------"<< endl; */
+
+  ll.insertAtIndex(1, 10);
+  ll.insertAtIndex(2, 11);
+  ll.insertAtIndex(6, 15);
+  ll.insertAtIndex(10, 15);
   ll.display();
   cout << endl;
   cout << "----------"<< endl;
+  
+  // ll.removeAtIndex(7);
+
+  /* ll.removeElement(4);
+  ll.display();
+  cout << endl;
+  cout << "----------" << endl; */
+
+  /* ll.insertHead(10);
+  ll.insertTail(13);
+  ll.display();
+  cout << endl;
+  cout << "----------" << endl; */
 
   return 0;
 }
