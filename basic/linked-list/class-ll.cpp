@@ -37,7 +37,7 @@ public:
   void insertTail(int value);
   void insertAtIndex(int index, int value);
   void reverseLL();
-  void reverseLLRecursively();
+  Node *reverseLLRecursively(Node *head);
 };
 
 // O(1)
@@ -135,7 +135,8 @@ void Linkedlist::removeAtIndex(int index) {
     while (curr != nullptr) {
       counter++;
       if (counter == index) {
-        prev->next = prev->next->next;
+        // prev->next = prev->next->next;
+        prev->next = curr->next;
         free(curr);
         break;
       }
@@ -171,7 +172,7 @@ void Linkedlist::removeElement(int value) {
 
 // O(n)
 void Linkedlist::insertHead(int value) {
-  Node* newNode = new Node(value);
+  Node *newNode = new Node(value);
   if (this->head != NULL) {
     newNode->next = this->head;
   }
@@ -180,27 +181,30 @@ void Linkedlist::insertHead(int value) {
 
 // O(n)
 void Linkedlist::insertTail(int value) {
-  Node* newNode = new Node(value);
-  Node* mover = this->head;
-  while(mover->next != NULL){
-    mover = mover->next;
+  Node *newNode = new Node(value);
+  if (this->head == nullptr) {
+    this->head = newNode;
+  } else {
+    Node *mover = this->head;
+    while (mover->next != NULL) {
+      mover = mover->next;
+    }
+    mover->next = newNode;
   }
-  mover->next = newNode;
 }
-
 
 // O(n)
 // Edge case : empty, index = 1 and index >= 2;
-void Linkedlist::insertAtIndex(int index, int value){
-  if(this->isEmpty() || index == 1){
+void Linkedlist::insertAtIndex(int index, int value) {
+  if (this->isEmpty() || index == 1) {
     insertHead(value);
   } else {
     int count = 0;
-    Node* mover = this->head;
-    while(mover != NULL){
+    Node *mover = this->head;
+    while (mover != NULL) {
       count++;
-      if(count == index - 1){
-        Node* newNode = new Node(value);
+      if (count == index - 1) {
+        Node *newNode = new Node(value);
         newNode->next = mover->next;
         mover->next = newNode;
       }
@@ -211,21 +215,33 @@ void Linkedlist::insertAtIndex(int index, int value){
 
 /*
 One more solution to reverse linked list using stack (brute force)
-  1. create a stack 
+  1. create a stack
   2. Travesal through the linkedlist and push to the stack
   3. Travesal through linkedlist again change the data to stack.pop();
   T(n) = O(2n) S(n)=O(n)
 */
 // O(n)
 void Linkedlist::reverseLL() {
-  Node* curr = this->head; Node* prev = nullptr; Node* next = nullptr;
-  while(curr != nullptr){
-    next = curr -> next;
+  Node *curr = this->head;
+  Node *prev = nullptr;
+  Node *next = nullptr;
+  while (curr != nullptr) {
+    next = curr->next;
     curr->next = prev;
     prev = curr;
     curr = next;
   }
   this->head = prev;
+}
+Node *Linkedlist::reverseLLRecursively(Node* head) {
+  if (head == nullptr || head->next == nullptr) {
+    return head;
+  }
+  Node *newHead = reverseLLRecursively(head->next);
+  Node *front = head->next;
+  front->next = head;
+  head->next = nullptr;
+  return newHead;
 }
 
 int main(int argc, char *argv[]) {
@@ -253,26 +269,35 @@ int main(int argc, char *argv[]) {
   cout << endl;
   cout << "----------"<< endl; */
 
-  ll.insertAtIndex(1, 10);
+  /* ll.insertAtIndex(1, 10);
   ll.insertAtIndex(2, 11);
   ll.insertAtIndex(6, 15);
   ll.insertAtIndex(10, 15);
   ll.display();
   cout << endl;
-  cout << "----------"<< endl;
-  
-  // ll.removeAtIndex(7);
+  cout << "----------"<< endl; */
+
+  /* ll.removeAtIndex(4);
+  ll.display();
+  cout << endl;
+  cout << "----------"<< endl; */
 
   /* ll.removeElement(4);
   ll.display();
   cout << endl;
   cout << "----------" << endl; */
 
-  /* ll.insertHead(10);
-  ll.insertTail(13);
+  // ll.insertHead(10);
+
+  /* ll.insertTail(13);
   ll.display();
   cout << endl;
   cout << "----------" << endl; */
+
+  ll.head = ll.reverseLLRecursively(ll.head);
+  ll.display();
+  cout << endl;
+  cout << "----------" << endl;
 
   return 0;
 }
