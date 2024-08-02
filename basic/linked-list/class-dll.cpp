@@ -102,11 +102,15 @@ void DoublyLinkedlist::removeHead() {
   if (this->isEmpty()) {
     cout << "List is Empty";
   } else {
-    Node *curr = this->head;
-    this->head = this->head->next;
-    this->head->prev = NULL;
-    curr->next = NULL;
-    delete curr;
+    if (this->head->next == NULL) {
+      this->head = NULL;
+    } else {
+      Node *curr = this->head;
+      this->head = this->head->next;
+      this->head->prev = NULL;
+      curr->next = NULL;
+      delete curr;
+    }
   }
 }
 
@@ -127,22 +131,20 @@ void DoublyLinkedlist::removeTail() {
 }
 
 // O(n)
+// index = 1 to n
 void DoublyLinkedlist::removeAtIndex(int index) {
-  if (this->isEmpty()) {
-    cout << "List is Empty";
+  if (this->isEmpty() || index == 1) {
+    this->removeHead();
   } else {
     Node *curr = this->head;
     Node *prev = NULL;
     int counter = 0;
-
-    if (index == 1) {
-      this->removeHead();
-    }
-
     while (curr != nullptr) {
       counter++;
       if (counter == index) {
         prev->next = prev->next->next;
+        curr->prev = nullptr;
+        curr->next = nullptr;
         free(curr);
         break;
       }
@@ -167,6 +169,8 @@ void DoublyLinkedlist::removeElement(int value) {
     while (curr != nullptr) {
       if (curr->data == value) {
         prev->next = prev->next->next;
+        curr->prev = nullptr;
+        curr->next = nullptr;
         free(curr);
         break;
       }
@@ -194,8 +198,8 @@ void DoublyLinkedlist::insertTail(int value) {
 }
 
 void DoublyLinkedlist::reverseDll() {
-  Node* curr = this->head;
-  Node* last = nullptr;
+  Node *curr = this->head;
+  Node *last = nullptr;
   while (curr != nullptr) {
     last = curr->prev;
     curr->prev = curr->next;
@@ -203,11 +207,10 @@ void DoublyLinkedlist::reverseDll() {
     curr = curr->prev;
   }
   this->head = last->prev;
-
 }
 
 int main(int argc, char *argv[]) {
-  vector<int> arr = {12, 2, 4, 1};
+  vector<int> arr = {12, 2, 4, 5};
 
   DoublyLinkedlist ll;
   ll.convertArr2DLL(arr);
@@ -225,17 +228,16 @@ int main(int argc, char *argv[]) {
   cout << endl;
   cout << "----------" << endl; */
 
-  ll.reverseDll();
-  ll.display();
-  cout << endl;
-  cout << "----------" << endl;
-
-  // ll.removeAtIndex(7);
-
-  /* ll.removeElement(4);
+  /* ll.reverseDll();
   ll.display();
   cout << endl;
   cout << "----------" << endl; */
+
+  ll.removeAtIndex(4);
+
+  ll.display();
+  cout << endl;
+  cout << "----------" << endl;
 
   /* ll.insertHead(10);
   ll.insertTail(13);

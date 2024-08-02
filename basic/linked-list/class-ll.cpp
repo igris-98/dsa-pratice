@@ -37,7 +37,8 @@ public:
   void insertTail(int value);
   void insertAtIndex(int index, int value);
   void reverseLL();
-  Node *reverseLLRecursively(Node *head);
+  Node* reverseLLRecursively(Node *head);
+  Node* middleNode();
 };
 
 // O(1)
@@ -233,6 +234,8 @@ void Linkedlist::reverseLL() {
   }
   this->head = prev;
 }
+
+// O(n)
 Node *Linkedlist::reverseLLRecursively(Node* head) {
   if (head == nullptr || head->next == nullptr) {
     return head;
@@ -242,6 +245,20 @@ Node *Linkedlist::reverseLLRecursively(Node* head) {
   front->next = head;
   head->next = nullptr;
   return newHead;
+}
+
+// O(n/2)
+Node* Linkedlist::middleNode(){
+  Node* slow = this->head;
+  Node* fast = this->head;
+  cout << this->head->data << "$";
+
+  while(fast == nullptr && fast->next == nullptr){
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+  
+  return slow;
 }
 
 int main(int argc, char *argv[]) {
@@ -297,6 +314,7 @@ int main(int argc, char *argv[]) {
   ll.head = ll.reverseLLRecursively(ll.head);
   ll.display();
   cout << endl;
+  cout << ll.middleNode()->data << endl;
   cout << "----------" << endl;
 
   return 0;
