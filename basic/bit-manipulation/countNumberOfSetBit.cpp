@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// O(log n)
 int countSetBits(int num) {
 
   // return __builtin_popcount(num);
@@ -19,6 +20,7 @@ int countSetBits(int num) {
   return count;
 }
 
+// O(log n)
 int countSetBits2(int num) {
 
   // return __builtin_popcount(num);
@@ -26,6 +28,7 @@ int countSetBits2(int num) {
   int count = 0;
   while (num != 0) {
       count++;
+    cout << count << endl;
     num = num & (num - 1);
   }
 
